@@ -7,11 +7,11 @@ int maxStepSize = 50;
 int minPointSize = 2;
 int maxPointSize = 5;
 
-
 int highlightWalkerStepSize = 20;
 int highlightWalkerPointSize = 4;
 
 ArrayList<Walker> walkers = new ArrayList();
+boolean exportEnabled = false;
 
 void setup() {
   size(300, 600);
@@ -32,9 +32,16 @@ void draw() {
     }
   }
 
-  // neue walkers generieren
-  for (int i = 0; i < (walkersAmount - walkers.size()); i++) {
-    generateWalker(i);
+  if (exportEnabled && walkers.size() == 0) {
+    exportImage();
+    exportEnabled = false;
+  }
+  
+  if (!exportEnabled) {
+    // neue walkers generieren
+    for (int i = 0; i < (walkersAmount - walkers.size()); i++) {
+      generateWalker(i);
+    }
   }
 
   // walkers zeichnen
@@ -64,7 +71,17 @@ void addWalker() {
   walkers.add(new Walker(stepSize, pointSize));
 }
 
-void keyReleased() {
+void exportImage() {
   saveFrame("export/bildname" + hour() + minute() + second() + "-#######.png");
+  println("saved image!");
+}
+
+void keyReleased() {
+  exportImage();
+}
+
+void mousePressed() {
+  exportEnabled = !exportEnabled;
+  println("export enabled: " + exportEnabled);
 }
 
